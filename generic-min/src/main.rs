@@ -30,6 +30,14 @@ impl LessThan for i32 {
 
 // TODO: implement the `min` function used in `main`.
 
+fn min<T: LessThan>(a: T, b: T) -> T {
+    if a.less_than(&b) {
+        a
+    } else {
+        b
+    }
+}
+
 fn main() {
     let cit1 = Citation { author: "Shapiro", year: 2011 };
     let cit2 = Citation { author: "Baumann", year: 2010 };
