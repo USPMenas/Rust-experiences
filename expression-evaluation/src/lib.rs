@@ -18,8 +18,28 @@ pub enum Expression {
 }
 
 pub fn eval(e: Expression) -> Result<i64, String> {
-    todo!()
+    match e {
+        Expression::Value(v) => Ok(v),
+        Expression::Op { op, left, right } => {
+            let left_val = eval(*left)?;
+            let right_val = eval(*right)?;
+
+            match op {
+                Operation::Add => Ok(left_val + right_val),
+                Operation::Sub => Ok(left_val - right_val),
+                Operation::Mul => Ok(left_val * right_val),
+                Operation::Div => {
+                    if right_val == 0 {
+                        Err(String::from("division by zero"))
+                    } else {
+                        Ok(left_val / right_val)
+                    }
+                }
+            }
+        }
+    }
 }
+
 
 #[test]
 fn test_value() {
@@ -40,7 +60,14 @@ fn test_sum() {
 
 #[test]
 fn test_sub() {
-    todo!("write some test here to check the substration");
+    assert_eq!(
+        eval(Expression::Op {
+            op: Operation:: Sub,
+            left: Box::new(Expression::Value(10)),
+            right: Box::new(Expression::Value(5))
+        }),
+        Ok(5)
+    );
 }
 
 #[test]
